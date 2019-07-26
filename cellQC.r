@@ -16,10 +16,10 @@ option_list = list(
 )
 opt = parse_args(OptionParser(option_list=option_list))
 
-if (opt$m == "t") {
-  cat("true \n")
-} else if (opt$m == "f") {
-  cat("false \n")
+if (opt$m) {
+  cat("Count matrix: ")
+  cat(opt$m)
+  cat("\n")
 } else {
-  cat("nothing! \n")
+  cat("Please provide path for a count matrix (-m/--matrix) \n")
 }
