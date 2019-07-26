@@ -1,6 +1,8 @@
 # Functions required to perform Kamil Slowikowski's QC algorithm for scRNAseq data
 # REQUIRED: library(matrixStats) for rowSds()
 # REQUIRED: library(scales) for comma()
+# REQUIRED: library(ggplot2)
+# REQIORED: library(dplyr)
 
 # calculate basic statistics for each gene
 stats_by_gene <- function(log2cpm) {
