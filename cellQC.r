@@ -17,9 +17,9 @@ option_list = list(
 opt = parse_args(OptionParser(option_list=option_list))
 
 if (opt$m == "t") {
-  cat("true")
+  cat("true \n")
 } else if (opt$m == "f") {
-  cat("false")
+  cat("false \n")
 } else {
-  cat("nothing!")
+  cat("nothing! \n")
 }
