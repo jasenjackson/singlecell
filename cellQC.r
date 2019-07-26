@@ -16,10 +16,13 @@ option_list = list(
 )
 opt = parse_args(OptionParser(option_list=option_list))
 
-if (is.na(opt$m)) {
+print_input <- function(input) {
   cat("Count matrix: ")
-  cat(opt$m)
-  cat("\n")
+  cat(input); cat("\n")
+}
+
+if (!is.na(opt$m)) {
+  print_input(opt$m)
 } else {
   cat("Please provide path for a count matrix (-m/--matrix) \n")
 }
