@@ -16,7 +16,7 @@ option_list = list(
 )
 opt = parse_args(OptionParser(option_list=option_list))
 
-if (opt$m) {
+if (opt$m==NA) {
   cat("Count matrix: ")
   cat(opt$m)
   cat("\n")
