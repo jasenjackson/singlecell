@@ -17,6 +17,48 @@ stats_by_gene <- function(log2cpm) {
   return (as.data.frame(gene_stats))
 }
 
+# calculate basic statistics for each cell
+stats_by_cell <- function(mtx, gene_stats, common_genes=TRUE, gene_count=TRUE, umi_count=TRUE, mt_pct=TRUE) {
+  
+  cell_stats <- data.frame(cell = colnames(mtx))
+  
+  if (umi_count == TRUE) {
+    cat("Counting the # of reads found in each cell \n")
+    cell_stats$umi_count = apply(mtx, 2, function(col) sum(col))}
+  
+  if (gene_count == TRUE) {
+    cat("Counting the # of genes expressed in each cell \n")
+    cell_stats$gene_count = apply(mtx, 2,function(col) sum(col > 0))}
+  
+  if (mt_pct == TRUE) {
+    # add "gene" column to input matrix
+    if (!("gene" %in% colnames(mtx))) {
+      mtx$gene <- rownames(mtx)}
+    
+    # count # of reads that map to mitochondrial genes
+    cat("Counting the # of mitochondrial reads in each cell \n")
+    cell_stats$mt_count <- apply(X = select(filter(mtx, str_detect(gene, "^MT-")), -gene),
+                                 MARGIN = 2, function(col) sum(col))
+    
+    cat("Calculating % reads mapping to mitochondrial genes for each cell \n")
+    cell_stats <- mutate(cell_stats, percent.mt = (mt_count / umi_count) * 100) %>%
+      select(-mt_count)
+    mtx <- select(mtx, -gene)}
+  
+  # quantify % of house_keeping (common_genes) expressed in each cell
+  if (!(missing(gene_stats)) & (common_genes==TRUE)) {
+    cat("Identifying housekeeping genes (genes expressed in >95% of cells) \n")
+    common_genes <- which(gene_stats$percent > 95) # find common genes
+    
+    cat("Calculating % of house keeping genes expressed in each cell \n")
+    cell_stats$percent.cg = apply(
+      X = mtx[common_genes,],
+      MARGIN = 2,
+      FUN = function(col) 100 * sum(col > 0) / length(common_genes))} 
+  
+  return(cell_stats)
+}
+
 # calculate %common genes detected for each sample
 # returns transposed df with added column
 pcg_from_gene_stats <- function(log2cpm, gene_stats) {

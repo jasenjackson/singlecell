@@ -1,0 +1,28 @@
+---
+title: "QC Filtering of Breast Cancer Atlas"
+author: "Jasen Jackson"
+date: "7/30/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# import packages and functions
+setwd('/projects/b1101/Jasen')
+source('singlecell/QCfunctions.R')
+
+library(matrixStats)
+library(scales)
+library(ggplot2)
+library(dplyr)
+```
+
+
+
+
+```{r}
+
+```
