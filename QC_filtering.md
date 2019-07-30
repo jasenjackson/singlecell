@@ -23,4 +23,4 @@ Import the count matrix for individual 4 from the Breast Epithelial atlas (Nguye
 ggplot(midwest, aes(x=area, y=poptotal)) + geom_point()
 ```
 
-![](singlecell/imagesunnamed-chunk-3-1.png)
+![](images/qc-unnamed-chunk-3-1.png)
