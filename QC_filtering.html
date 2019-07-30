@@ -192,60 +192,13 @@ source('singlecell/QCfunctions.R')
 library(matrixStats)
 library(scales)
 library(ggplot2)
+library(stringr)
 library(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: 'dplyr'</code></pre>
-<pre><code>## The following object is masked from 'package:matrixStats':
-## 
-##     count</code></pre>
-<pre><code>## The following objects are masked from 'package:stats':
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>library(stringr)</code></pre>
-<p>Import the count matrix for individual 4 from the Breast Epithelial atlas (Nguyen, et. al 2018; doi: 10.1038/s41467-018-04334-1). The rows are genes and the columns are cells.</p>
-<pre class="r"><code>Ind4.df &lt;- read.table(file = &quot;/projects/b1101/Jasen/data/Breast_scRNA_Kessenbrock_Ind4.txt&quot;, header = TRUE, row.names=1)
-head(Ind4.df[,1:4])</code></pre>
-<pre><code>##               Ind4_AAACATACGTACAC Ind4_AAACATTGCCTCCA Ind4_AAACATTGTGAAGA
-## RP11-34P13.3                    0                   0                   0
-## FAM138A                         0                   0                   0
-## OR4F5                           0                   0                   0
-## RP11-34P13.7                    0                   0                   0
-## RP11-34P13.8                    0                   0                   0
-## RP11-34P13.14                   0                   0                   0
-##               Ind4_AAACATTGTTCTTG
-## RP11-34P13.3                    0
-## FAM138A                         0
-## OR4F5                           0
-## RP11-34P13.7                    0
-## RP11-34P13.8                    0
-## RP11-34P13.14                   0</code></pre>
-<div id="calculate-statistics-for-each-gene-and-cell." class="section level2">
-<h2>Calculate statistics for each gene and cell.</h2>
-<p>The raw count, mean and standard deviation are computed by the stats_by_gene() function. The gene count, read (umi) count and percent of reads mapped to mitochondrial genes (‘percent.mt’) are calculated by default using the stats_by_cell() function. If the matrix computed by the stats_by_gene() function is included then ‘percent.cg’, an additional QC metric, is calculated.</p>
-<pre class="r"><code>Ind4.genestats &lt;- stats_by_gene(Ind4.df)
-Ind4.genestats[1:4,]</code></pre>
-<pre><code>##   n        mean         sd   percent
-## 1 0 0.000000000 0.00000000 0.0000000
-## 2 0 0.000000000 0.00000000 0.0000000
-## 3 0 0.000000000 0.00000000 0.0000000
-## 4 6 0.001457726 0.03815697 0.1457726</code></pre>
-<p>The stats_by_gene() function calculates the % of cells expressing each gene, and stats_by_cell() uses this metric to define a set of housekeeping genes or common genes (expressed in &gt;95% of cells). The % of housekeeping (common) genes expressed in each cell is then saved in the ‘percent.cg’ column.</p>
-<pre class="r"><code>Ind4.cellstats &lt;- stats_by_cell(Ind4.df, Ind4.genestats, common_genes=TRUE)</code></pre>
-<pre><code>## Counting the # of reads found in each cell 
-## Counting the # of genes expressed in each cell 
-## Counting the # of mitochondrial reads in each cell 
-## Calculating % reads mapping to mitochondrial genes for each cell 
-## Identifying housekeeping genes (genes expressed in &gt;95% of cells) 
-## Calculating % of house keeping genes expressed in each cell</code></pre>
-<pre class="r"><code>Ind4.cellstats[1:4,]</code></pre>
-<pre><code>##                  cell umi_count gene_count percent.mt percent.cg
-## 1 Ind4_AAACATACGTACAC      8761       2317   2.328501  100.00000
-## 2 Ind4_AAACATTGCCTCCA      4568       1402   2.145359   98.50746
-## 3 Ind4_AAACATTGTGAAGA     10450       2324   4.028708  100.00000
-## 4 Ind4_AAACATTGTTCTTG      2745        921  16.794171   81.34328</code></pre>
+<div id="import-the-count-matrix" class="section level2">
+<h2>Import the count matrix</h2>
+<p>Import the count matrix for individual 4 from the Breast Epithelial atlas (Nguyen, et. al 2018; <a href="doi:%5B10.1038/s41467-018-04334-1%5D(https://www.nature.com/articles/s41467-018-04334-1)" class="uri">doi:[10.1038/s41467-018-04334-1](https://www.nature.com/articles/s41467-018-04334-1)</a>. The rows are genes and the columns are cells.</p>
+<pre class="r"><code>print(&quot;hello world&quot;)</code></pre>
+<pre><code>## [1] &quot;hello world&quot;</code></pre>
 </div>
 
 

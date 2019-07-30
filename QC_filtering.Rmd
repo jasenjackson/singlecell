@@ -2,14 +2,16 @@
 title: "QC Filtering of Breast Epithelial Atlas"
 author: "Jasen Jackson"
 date: "7/30/2019"
-output: html_document
+output:
+  html_document:
+    keep_md: TRUE
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r, warning=FALSE}
+```{r, message=FALSE}
 # import packages and functions
 setwd('/projects/b1101/Jasen')
 source('singlecell/QCfunctions.R')
@@ -17,28 +19,13 @@ source('singlecell/QCfunctions.R')
 library(matrixStats)
 library(scales)
 library(ggplot2)
-library(dplyr)
 library(stringr)
+library(dplyr)
 ```
 
-Import the count matrix for individual 4 from the Breast Epithelial atlas (Nguyen, et. al 2018; doi: 10.1038/s41467-018-04334-1). The rows are genes and the columns are cells.
+## Import the count matrix
+Import the count matrix for individual 4 from the Breast Epithelial atlas (Nguyen, et. al 2018; doi:[10.1038/s41467-018-04334-1](https://www.nature.com/articles/s41467-018-04334-1). The rows are genes and the columns are cells.
 
-```{r, cache=TRUE}
-Ind4.df <- read.table(file = "/projects/b1101/Jasen/data/Breast_scRNA_Kessenbrock_Ind4.txt", header = TRUE, row.names=1)
-head(Ind4.df[,1:4])
-```
-
-## Calculate statistics for each gene and cell. 
-The raw count, mean and standard deviation are computed by the stats_by_gene() function. The gene count, read (umi) count and percent of reads mapped to mitochondrial genes ('percent.mt') are calculated by default using the stats_by_cell() function. If the matrix computed by the stats_by_gene() function is included then 'percent.cg', an additional QC metric, is calculated.
 ```{r}
-Ind4.genestats <- stats_by_gene(Ind4.df)
-Ind4.genestats[1:4,]
-```
-
-The stats_by_gene() function calculates the % of cells expressing each gene, and stats_by_cell() uses this metric to define a set of housekeeping genes or common genes (expressed in >95% of cells). The % of housekeeping (common) genes expressed in each cell is then saved in the 'percent.cg' column. 
-```{r}
-Ind4.cellstats <- stats_by_cell(Ind4.df, Ind4.genestats, common_genes=TRUE)
-```
-```{r}
-Ind4.cellstats[1:4,]
+print("hello world")
 ```
