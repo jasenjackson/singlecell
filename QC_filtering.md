@@ -1,3 +1,12 @@
+QC Filtering of Breast Epithelial Atlas
+=======================================
+
+Author: Jasen Jackson
+---------------------
+
+Date: 7/30/19
+-------------
+
 ``` r
 # import packages and functions
 setwd('/projects/b1101/Jasen')
