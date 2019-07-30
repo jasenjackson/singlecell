@@ -87,7 +87,7 @@ ggplot(Ind4.cellstats, aes(umi_count, gene_count, color = percent.mt)) +
        scale_color_viridis_c()
 ```
 
-![](QC_filtering_files/figure-markdown_github/unnamed-chunk-26-1.png)
+![](images/QC_filtering_files/figure-markdown_github/unnamed-chunk-26-1.png)
 
 Percentage of housekeeping genes (common genes percentage) may be a more precise alternative to filtering on mitochondrial percentage. We can plot % of common genes detected in each cell to determine a cutoff.
 
@@ -96,7 +96,7 @@ ggplot(Ind4.cellstats, aes(reorder(cell, percent.cg), percent.cg))  +
        geom_point(size=0.7) 
 ```
 
-![](QC_filtering_files/figure-markdown_github/unnamed-chunk-27-1.png) It looks like there is an elbow around 85%. We can compare this cutoff to gene count and umi\_count.
+![](images/QC_filtering_files/figure-markdown_github/unnamed-chunk-27-1.png) It looks like there is an elbow around 85%. We can compare this cutoff to gene count and umi\_count.
 
 ``` r
 ggplot(Ind4.cellstats, aes(umi_count, gene_count, color=percent.cg)) +
@@ -104,4 +104,4 @@ ggplot(Ind4.cellstats, aes(umi_count, gene_count, color=percent.cg)) +
   scale_color_viridis_c(direction = -1)
 ```
 
-![](QC_filtering_files/figure-markdown_github/unnamed-chunk-28-1.png)
+![](images/QC_filtering_files/figure-markdown_github/unnamed-chunk-28-1.png)
