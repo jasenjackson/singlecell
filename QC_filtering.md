@@ -17,14 +17,10 @@ library(dplyr)
 Import the count matrix
 -----------------------
 
-Import the count matrix for individual 4 from the Breast Epithelial atlas (Nguyen, et. al 2018; <doi:%5B10.1038/s41467-018-04334-1%5D(https://www.nature.com/articles/s41467-018-04334-1)>. <br /> <br /> The rows are genes and the columns are cells.
+Import the count matrix for iiindividual 4 from the Breast Epithelial atlas (Nguyen, et. al 2018; <doi:%5B10.1038/s41467-018-04334-1%5D(https://www.nature.com/articles/s41467-018-04334-1)>. <br /> <br /> The rows are genes and the columns are cells.
 
 ``` r
 ggplot(midwest, aes(x=area, y=poptotal)) + geom_point()
 ```
 
-<<<<<<< HEAD
 ![](images/qc-unnamed-chunk-3-1.png)
-=======
-![](images/unnamed-chunk-3-1.png)
->>>>>>> 3386e7574d8bf732ae0055e353a7d38ca877047c
