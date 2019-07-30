@@ -23,6 +23,47 @@ library(dplyr)
 
 ## Import the count matrix
 Import the count matrix forrreal individual 4 from the Breast Epithelial atlas (Nguyen, et. al 2018; doi:[10.1038/s41467-018-04334-1](https://www.nature.com/articles/s41467-018-04334-1). <br /> <br /> The rows are genes and the columns are cells.
+
 ```{r}
-ggplot(midwest, aes(x=area, y=poptotal)) + geom_point()
+Ind4.df <- read.table(file = "/projects/b1101/Jasen/data/Breast_scRNA_Kessenbrock_Ind4.txt", header = TRUE, row.names=1)
+head(Ind4.df[,1:4])
+```
+
+## Calculate statistics for each gene and cell. 
+The mean and standard deviation and % of cells expressing each gene are computed by the stats_by_gene() function. 
+```{r}
+Ind4.genestats <- stats_by_gene(Ind4.df)
+Ind4.genestats[1:4,]
+```
+
+The gene count, read (umi) count and percent of reads mapped to mitochondrial genes ('percent.mt') are calculated by default using the stats_by_cell() function. If the matrix computed by the stats_by_gene() function is included then 'percent.cg', an additional QC metric, is calculated.
+
+The stats_by_gene() function calculates the % of cells expressing each gene, and stats_by_cell() uses this metric to define a set of housekeeping genes or common genes (expressed in >95% of cells). The % of housekeeping (common) genes expressed in each cell is then saved in the 'percent.cg' column. 
+```{r}
+Ind4.cellstats <- stats_by_cell(Ind4.df, Ind4.genestats, common_genes=TRUE)
+```
+```{r}
+Ind4.cellstats[1:4,]
+```
+
+Typically, cells are filtered jointly by gene count, umi count and percentage of mitochondrial genes. Low quality cells tend to have low values for each of these features. 
+```{r}
+ggplot(Ind4.cellstats, aes(umi_count, gene_count, color = percent.mt)) +
+       geom_point(size=0.7) +
+       scale_color_viridis_c()
+```
+
+Percentage of housekeeping genes (common genes percentage) may be a more precise alternative to filtering on mitochondrial percentage. We can plot % of common genes detected in each cell to determine a cutoff. 
+```{r}
+ggplot(Ind4.cellstats, aes(reorder(cell, percent.cg), percent.cg))  + 
+       geom_point(size=0.7) 
+```
+It looks like there is an elbow around 85%. We can compare this cutoff to gene count and umi_count. 
+```{r}
+ggplot(Ind4.cellstats, aes(umi_count, gene_count, color=percent.cg)) +
+  geom_point(size=0.7) +
+  scale_color_viridis_c(direction = -1)
+```
+
+```{r}
 ```
