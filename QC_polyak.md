@@ -190,18 +190,6 @@ ncol(T47D.mtx); nrow(T47D.mtx)
     ## [1] 8019
 
 ``` r
-head(T47D.mtx[,1:3])
-```
-
-    ##       T47D.bcFNUW T47D.bcFPKW T47D.bcFNXB
-    ## AAAS            0           1           2
-    ## AACS            0           1           0
-    ## AAGAB           0           0           0
-    ## AAMP            1           0           0
-    ## AAR2            1           1           1
-    ## AARD            1           0           0
-
-``` r
 # Calculate and plot QC statistics
 T47D.cellstats <- QCstats(T47D.mtx, verbose=FALSE)
 QCplot(T47D.cellstats, vline=8000) 
@@ -240,18 +228,6 @@ ncol(ZR75.mtx); nrow(ZR75.mtx)
     ## [1] 2811
 
     ## [1] 8019
-
-``` r
-head(ZR75.mtx[,1:5])
-```
-
-    ##       ZR75.bcAURQ ZR75.bcIIDI ZR75.bcHYSB ZR75.bcHTNA ZR75.bcGIZT
-    ## AAAS            0           0           0           0           0
-    ## AACS            0           0           2           0           0
-    ## AAGAB           3           1           1           3           1
-    ## AAMP            1           0           0           0           0
-    ## AAR2            1           1           2           2           0
-    ## AARD            0           0           0           0           0
 
 ``` r
 # Calculate and plot QC statistics
