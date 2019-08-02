@@ -117,14 +117,14 @@ QCplot <- function(cellstats, hline, vline) {
     scale_color_viridis_c()
   
   if (!(missing(hline))) {
-    p1 <- p1 + geom_hline(yintercept=hline, color="red")
-    p2 <- p2 + geom_hline(yintercept=hline, color="red")
-    p4 <- p4 + geom_hline(yintercept=hline, color="red")}
+    p1 <- p1 + geom_hline(yintercept=hline, color="red", size=0.2)
+    p2 <- p2 + geom_hline(yintercept=hline, color="red", size=0.2)
+    p4 <- p4 + geom_hline(yintercept=hline, color="red", size=0.2)}
   
   if (!(missing(vline))) {
-    p1 <- p1 + geom_vline(xintercept=vline, color="red")
-    p2 <- p2 + geom_vline(xintercept=vline, color="red")
-    p4 <- p4 + geom_vline(xintercept=vline, color="red")}
+    p1 <- p1 + geom_vline(xintercept=vline, color="red", size=0.2)
+    p2 <- p2 + geom_vline(xintercept=vline, color="red", size=0.2)
+    p4 <- p4 + geom_vline(xintercept=vline, color="red", size=0.2)}
   
   gridExtra::grid.arrange(p1,p2,p3,p4, ncol=2)
 }

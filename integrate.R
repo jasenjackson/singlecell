@@ -6,12 +6,13 @@
 # into 1 seurat object
 
 # usage: Rscript integrate.r -s "/data/seurat_object.rds" -g "individual" -r "Ind4"
-#        Rscript integrate.r --seuratObject" "../data/BreastAtlas.rds" \
-#                         --groupLabel "individual" \
-#                         --reference "Ind4" \
-#                         --out "../data/BreastAtlas.integrated.rds
+#        Rscript integrate.r --seuratObject" "../data/BreastCancerAtlas.rds" \
+#                         --groupLabel "sample_origin" \
+#                         --reference "Ind4,Ind5,Ind6,Ind7" \
+#                         --out "../data/BreastCancerAtlas.integrated.rds"
 library(Seurat)
 library(ggplot2)
+options(future.globals.maxSize = 4000 * 1024^2)
 
 # parse arguments
 suppressPackageStartupMessages(require(optparse))
@@ -26,10 +27,9 @@ opt = parse_args(OptionParser(option_list=option_list))
 main <- function(seuratObject, groupLabel, reference, out) {
   cat("\nSeurat object: "); cat(seuratObject); cat("\n")
   cat("Group label: "); cat(groupLabel); cat("\n")
-  cat("Reference: "); cat(reference); cat("\n")
+  cat("Reference(s): "); for (i in reference){ cat(i); cat(" ") }; cat("\n")
   cat("Output path: "); cat(out); cat("\n\n")
-  
-  
+
   cat("Reading seurat object\n")
   sobj <- readRDS(seuratObject)
 
@@ -39,7 +39,7 @@ main <- function(seuratObject, groupLabel, reference, out) {
   cat("Datasets:");cat(names(sobj.list)); cat("\n")
   cat("Normalizing each dataset\n")
   for (i in names(sobj.list)) {
-    cat(i); cat("\n")
+    cat("\t"); cat(i); cat("\n")
     sobj.list[[i]] <- SCTransform(sobj.list[[i]], verbose = FALSE)
   }
 
@@ -48,6 +48,7 @@ main <- function(seuratObject, groupLabel, reference, out) {
   sobj.list <- PrepSCTIntegration(object.list = sobj.list, anchor.features = sobj.features)
 
   cat("Setting reference dataset\n")
+  reference <- strsplit(reference, split=",")[[1]]
   reference_dataset <- which(names(sobj.list) == reference)
 
   cat("Finding integration anchors\n")
@@ -75,5 +76,7 @@ if (is.na(opt$seuratObject)) {
 } else if (is.na(opt$out)) {
   cat("Input error: please provide the output path \n")
 } else {
-  main(opt$seuratObject, opt$groupLabel, opt$reference, opt$out)
+  # split up references
+  reference <- strsplit(opt$reference, split=",")[[1]]
+  main(opt$seuratObject, opt$groupLabel, reference, opt$out)
 }
