@@ -1,0 +1,51 @@
+---
+output: rmarkdown::github_document
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  fig.path = "figures/QC_Kessenbrock-", 
+  echo = TRUE)
+``` 
+# Analysis of integrated breast epithelial atlas
+```{r}
+library(Seurat)
+library(ggplot2)
+```
+
+Nguyen, et. al used 10X Chromium single-cell RNA sequencing to profile mammary epithelial cells of 4 individuals. The raw count data from this experiment were quality filtered with custom R scripts, normalized for sequencing depth using scTransform and integrated using Seurat's reference-based integratoin method. 
+```{r, fig.width=10, fig.height=5}
+BreastAtlas <- readRDS("/projects/b1101/Jasen/data/BreastAtlas.integrated.rds")
+
+# Perform louvain algorithm via the Seurat package to identify cell clusters
+BreastAtlas <- FindNeighbors(BreastAtlas, dims = c(1:30), verbose = FALSE)
+BreastAtlas <- FindClusters(BreastAtlas, verbose = FALSE)
+
+# Plot by Individual and by Seurat cluster
+p1 <- AugmentPlot(DimPlot(BreastAtlas, reduction = "umap", group.by = "individual", pt.size=0.1) + DarkTheme())
+p2 <- AugmentPlot(DimPlot(BreastAtlas, reduction = "umap", group.by = "seurat_clusters", pt.size=0.1) + DarkTheme())
+gridExtra::grid.arrange(p1,p2, ncol=2)
+```
+
+Nguyen, et. al identified three primary types of mammary cells: Basal, Luminal 1 (L1) and Luminal 2. KRT18 was identified as a luminal marker, whereas KRT14 was identified as a basal marker. SLPI and ANKRD30A were identified as marker genes for Luminal 1 and Luminal2 respectively. CD74, AGR2, LTF, SAA2, KRT23, ACTA2, KRT17, and IL24 were identified as within-type marker genes as well. Generally, these marker gene expression patterns were reproducible following integration across datasets. 
+```{r, fig.width = 12, fig.height = 7}
+featureMap.df <- FetchData(object = BreastAtlas, vars = c("UMAP_1", "UMAP_2",
+                                                          "KRT18", "KRT14", "SLPI", "ANKRD30A",
+                                                          "CD74", "AGR2", "LTF", "SAA2",
+                                                          "KRT23","ACTA2", "KRT17", "IL24"))
+
+p1 <- ggplot(featureMap.df, aes(UMAP_1, UMAP_2, color = KRT18)) + geom_point(size=0.1) + scale_color_viridis_c()
+p2 <- ggplot(featureMap.df, aes(UMAP_1, UMAP_2, color = KRT14)) + geom_point(size=0.1) + scale_color_viridis_c()
+p3 <- ggplot(featureMap.df, aes(UMAP_1, UMAP_2, color = SLPI)) + geom_point(size=0.1) + scale_color_viridis_c()
+p4 <- ggplot(featureMap.df, aes(UMAP_1, UMAP_2, color = ANKRD30A)) + geom_point(size=0.1) + scale_color_viridis_c()
+p5 <- ggplot(featureMap.df, aes(UMAP_1, UMAP_2, color = CD74)) + geom_point(size=0.1) + scale_color_viridis_c()
+p6 <- ggplot(featureMap.df, aes(UMAP_1, UMAP_2, color = AGR2)) + geom_point(size=0.1) + scale_color_viridis_c()
+p7 <- ggplot(featureMap.df, aes(UMAP_1, UMAP_2, color = LTF)) + geom_point(size=0.1) + scale_color_viridis_c()
+p8 <- ggplot(featureMap.df, aes(UMAP_1, UMAP_2, color = SAA2)) + geom_point(size=0.1) + scale_color_viridis_c()
+p9 <- ggplot(featureMap.df, aes(UMAP_1, UMAP_2, color = KRT23)) + geom_point(size=0.1) + scale_color_viridis_c()
+p10 <- ggplot(featureMap.df, aes(UMAP_1, UMAP_2, color = ACTA2)) + geom_point(size=0.1) + scale_color_viridis_c()
+p11 <- ggplot(featureMap.df, aes(UMAP_1, UMAP_2, color = KRT17)) + geom_point(size=0.1) + scale_color_viridis_c()
+p12 <- ggplot(featureMap.df, aes(UMAP_1, UMAP_2, color = IL24)) + geom_point(size=0.1) + scale_color_viridis_c()
+
+gridExtra::grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, ncol = 4)
+```
