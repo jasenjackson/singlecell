@@ -150,18 +150,6 @@ ncol(BT474.mtx); nrow(BT474.mtx)
     ## [1] 8019
 
 ``` r
-head(BT474.mtx[,1:3])
-```
-
-    ##       BT474.bcIIAD BT474.bcBSFT BT474.bcDZXX
-    ## AAAS             0            0            0
-    ## AACS             1            0            1
-    ## AAGAB            0            0            0
-    ## AAMP             1            2            0
-    ## AAR2             3            0            0
-    ## AARD             0            0            0
-
-``` r
 # Calculate and plot QC statistics
 BT474.cellstats <- QCstats(BT474.mtx, verbose=FALSE)
 QCplot(BT474.cellstats,hline=950, vline=9000) 
