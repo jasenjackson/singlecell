@@ -1,5 +1,5 @@
 
-QC of breast cancer cell line data (scRNA-seq) from the [Polyak lab](https://www.polyaklab.dfci.harvard.edu/)
+QC of cell line data (scRNA-seq) from the [Polyak lab](https://www.polyaklab.dfci.harvard.edu/)
 =============================================================================================================
 
 ``` r
