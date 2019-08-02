@@ -7,7 +7,7 @@ library(Seurat)
 library(ggplot2)
 ```
 
-Nguyen, et. al used 10X Chromium single-cell RNA sequencing to profile mammary epithelial cells of 4 individuals. The raw count data from this experiment were quality filtered with custom R scripts, normalized for sequencing depth using scTransform and integrated using Seurat's reference-based integratoin method.
+Nguyen, et. al used 10X Chromium single-cell RNA sequencing to profile mammary epithelial cells of 4 individuals. The raw count data from this experiment were [quality filtered with custom R scripts](https://github.com/jasenjackson/singlecell/blob/master/QC_Kessenbrock.md), normalized for sequencing depth using scTransform and integrated using Seurat's reference-based integration method.
 
 ``` r
 BreastAtlas <- readRDS("/projects/b1101/Jasen/data/BreastAtlas.integrated.rds")
@@ -18,20 +18,13 @@ BreastAtlas <- FindClusters(BreastAtlas, verbose = FALSE)
 
 # Plot by Individual and by Seurat cluster
 p1 <- AugmentPlot(DimPlot(BreastAtlas, reduction = "umap", group.by = "individual", pt.size=0.1) + DarkTheme())
-```
-
-    ## Warning: Using `as.character()` on a quosure is deprecated as of rlang 0.3.0.
-    ## Please use `as_label()` or `as_name()` instead.
-    ## This warning is displayed once per session.
-
-``` r
 p2 <- AugmentPlot(DimPlot(BreastAtlas, reduction = "umap", group.by = "seurat_clusters", pt.size=0.1) + DarkTheme())
 gridExtra::grid.arrange(p1,p2, ncol=2)
 ```
 
-![](figures/QC_Kessenbrock-unnamed-chunk-3-1.png)
+![](figures/Integrated_Mammary-unnamed-chunk-3-1.png)
 
-Nguyen, et. al identified three primary types of mammary cells: Basal, Luminal 1 (L1) and Luminal 2. KRT18 was identified as a luminal marker, whereas KRT14 was identified as a basal marker. SLPI and ANKRD30A were identified as marker genes for Luminal 1 and Luminal2 respectively. CD74, AGR2, LTF, SAA2, KRT23, ACTA2, KRT17, and IL24 were identified as within-type marker genes as well. Generally, these marker gene expression patterns were reproducible following integration across datasets.
+Nguyen, et. al identified three primary types of mammary cells: Basal, Luminal 1 (L1) and Luminal 2 (L2). KRT18 was identified as a luminal marker, whereas KRT14 was identified as a basal marker. SLPI and ANKRD30A were identified as marker genes for Luminal 1 and Luminal2 respectively. CD74, AGR2, LTF, SAA2, KRT23, ACTA2, KRT17, and IL24 were identified as within-type marker genes as well. Generally, these marker gene expression patterns were reproducible following integration across datasets.
 
 ``` r
 featureMap.df <- FetchData(object = BreastAtlas, vars = c("UMAP_1", "UMAP_2",
@@ -55,4 +48,4 @@ p12 <- ggplot(featureMap.df, aes(UMAP_1, UMAP_2, color = IL24)) + geom_point(siz
 gridExtra::grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, ncol = 4)
 ```
 
-![](figures/QC_Kessenbrock-unnamed-chunk-4-1.png)
+![](figures/Integrated_Mammary-unnamed-chunk-4-1.png)
