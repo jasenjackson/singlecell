@@ -1,6 +1,6 @@
 
 QC of cell line data (scRNA-seq) from the [Polyak lab](https://www.polyaklab.dfci.harvard.edu/)
-=============================================================================================================
+===============================================================================================
 
 ``` r
 # import packages and functions
@@ -150,6 +150,18 @@ ncol(BT474.mtx); nrow(BT474.mtx)
     ## [1] 8019
 
 ``` r
+head(BT474.mtx[,1:3])
+```
+
+    ##       BT474.bcIIAD BT474.bcBSFT BT474.bcDZXX
+    ## AAAS             0            0            0
+    ## AACS             1            0            1
+    ## AAGAB            0            0            0
+    ## AAMP             1            2            0
+    ## AAR2             3            0            0
+    ## AARD             0            0            0
+
+``` r
 # Calculate and plot QC statistics
 BT474.cellstats <- QCstats(BT474.mtx, verbose=FALSE)
 QCplot(BT474.cellstats,hline=950, vline=9000) 
@@ -188,6 +200,18 @@ ncol(T47D.mtx); nrow(T47D.mtx)
     ## [1] 2530
 
     ## [1] 8019
+
+``` r
+head(T47D.mtx[,1:3])
+```
+
+    ##       T47D.bcFNUW T47D.bcFPKW T47D.bcFNXB
+    ## AAAS            0           1           2
+    ## AACS            0           1           0
+    ## AAGAB           0           0           0
+    ## AAMP            1           0           0
+    ## AAR2            1           1           1
+    ## AARD            1           0           0
 
 ``` r
 # Calculate and plot QC statistics
@@ -230,6 +254,18 @@ ncol(ZR75.mtx); nrow(ZR75.mtx)
     ## [1] 8019
 
 ``` r
+head(ZR75.mtx[,1:5])
+```
+
+    ##       ZR75.bcAURQ ZR75.bcIIDI ZR75.bcHYSB ZR75.bcHTNA ZR75.bcGIZT
+    ## AAAS            0           0           0           0           0
+    ## AACS            0           0           2           0           0
+    ## AAGAB           3           1           1           3           1
+    ## AAMP            1           0           0           0           0
+    ## AAR2            1           1           2           2           0
+    ## AARD            0           0           0           0           0
+
+``` r
 # Calculate and plot QC statistics
 ZR75.cellstats <- QCstats(ZR75.mtx, verbose=FALSE)
 QCplot(ZR75.cellstats, hline = 900, vline = 12000) 
@@ -256,10 +292,10 @@ ncol(ZR75.mtx) - ncol(ZR75); ((ncol(ZR75.mtx)-ncol(ZR75)) / ncol(ZR75.mtx)) * 10
 rm(ZR75.cellstats); rm(ZR75.mtx); rm(ZR75.meta)
 ```
 
-Merging cell lines with Breast Epithelial Atlas
------------------------------------------------
+Merging cell lines into one Seurat object
+-----------------------------------------
 
-Each cell line was first merged into an aggregate 'BreastCancerAtlas' object. The datasets will be split by 'sample\_origin' before reference-based integration.
+Each cell line was merged into an aggregate 'BreastCancerAtlas' object. The datasets will be split by 'sample\_origin' before reference-based integration.
 
 ``` r
 BreastCancerAtlas <- merge(x = MCF7_1, y = list(MCF7_2, SUM159, T47D, ZR75, BT474))
@@ -301,112 +337,25 @@ head(BreastCancerAtlas[[]])
     ## MCF7.bcFXIV      TRUE      TRUE        MCF7_1
     ## MCF7.bcGNHW      TRUE      TRUE        MCF7_1
 
-The integrated breast epithelial dataset was then joined with the breast cancer cell lines.
-
-``` r
-BreastAtlas.integrated <- readRDS(file="/projects/b1101/Jasen/data/BreastAtlas.integrated.rds") 
-ncol(BreastAtlas.integrated); nrow(BreastAtlas.integrated)
-```
-
-    ## [1] 23708
-
-    ## [1] 3000
-
-``` r
-BreastAtlas.integrated[["sample_origin"]] <- BreastAtlas.integrated[["individual"]]
-BreastAtlas.integrated[["individual"]] <- NULL
-
-# set malignant & cell_line columns
-malignant <- rep(FALSE, ncol(BreastAtlas.integrated))
-BreastAtlas.integrated[["malignant"]] <- malignant
-
-cell_line <- rep(FALSE, ncol(BreastAtlas.integrated))
-BreastAtlas.integrated[["cell_line"]] <- cell_line
-
-head(BreastAtlas.integrated[[]])
-```
-
-    ##                     orig.ident umi_count gene_count percent.mt percent.cg
-    ## Ind4_AAACATACGTACAC       Ind4      8761       2317   2.328501  100.00000
-    ## Ind4_AAACATTGCCTCCA       Ind4      4568       1402   2.145359   98.50746
-    ## Ind4_AAACATTGTGAAGA       Ind4     10450       2324   4.028708  100.00000
-    ## Ind4_AAACCGTGCCTTAT       Ind4     12362       3042   2.038505  100.00000
-    ## Ind4_AAACCGTGCTACTT       Ind4      4317       1405   1.088719   99.25373
-    ## Ind4_AAACCGTGTGTGGT       Ind4      8974       2129   5.460218  100.00000
-    ##                     nCount_RNA nFeature_RNA nCount_SCT nFeature_SCT
-    ## Ind4_AAACATACGTACAC       8761         2317       6864         2306
-    ## Ind4_AAACATTGCCTCCA       4568         1402       5879         1402
-    ## Ind4_AAACATTGTGAAGA      10450         2324       6896         2238
-    ## Ind4_AAACCGTGCCTTAT      12362         3042       7252         2889
-    ## Ind4_AAACCGTGCTACTT       4317         1405       5789         1410
-    ## Ind4_AAACCGTGTGTGGT       8974         2129       6854         2120
-    ##                     sample_origin malignant cell_line
-    ## Ind4_AAACATACGTACAC          Ind4     FALSE     FALSE
-    ## Ind4_AAACATTGCCTCCA          Ind4     FALSE     FALSE
-    ## Ind4_AAACATTGTGAAGA          Ind4     FALSE     FALSE
-    ## Ind4_AAACCGTGCCTTAT          Ind4     FALSE     FALSE
-    ## Ind4_AAACCGTGCTACTT          Ind4     FALSE     FALSE
-    ## Ind4_AAACCGTGTGTGGT          Ind4     FALSE     FALSE
-
-``` r
-# Merge non-malignant reference cells 'under' cell line data
-BreastCancerAtlas <- merge(x = BreastCancerAtlas, y = BreastAtlas.integrated)
-ncol(BreastCancerAtlas); nrow(BreastCancerAtlas)
-```
-
-    ## [1] 36545
-
-    ## [1] 33813
-
-``` r
-# remove redundant columns
-BreastCancerAtlas[["nCount_RNA"]] <- NULL
-BreastCancerAtlas[["nFeature_RNA"]] <- NULL
-
-head(BreastCancerAtlas[[]])
-```
-
-    ##             orig.ident umi_count gene_count percent.mt percent.cg
-    ## MCF7.bcAONH     MCF7_1      7811       2600   8.846499  100.00000
-    ## MCF7.bcDILR     MCF7_1      7354       2513   9.069894  100.00000
-    ## MCF7.bcAFKP     MCF7_1      5645       2082   4.216120  100.00000
-    ## MCF7.bcFUVU     MCF7_1      4752       1842   5.450337   99.27536
-    ## MCF7.bcFXIV     MCF7_1      4091       1551   8.457590  100.00000
-    ## MCF7.bcGNHW     MCF7_1      3319       1568  10.756252   97.82609
-    ##             malignant cell_line sample_origin nCount_SCT nFeature_SCT
-    ## MCF7.bcAONH      TRUE      TRUE        MCF7_1         NA           NA
-    ## MCF7.bcDILR      TRUE      TRUE        MCF7_1         NA           NA
-    ## MCF7.bcAFKP      TRUE      TRUE        MCF7_1         NA           NA
-    ## MCF7.bcFUVU      TRUE      TRUE        MCF7_1         NA           NA
-    ## MCF7.bcFXIV      TRUE      TRUE        MCF7_1         NA           NA
-    ## MCF7.bcGNHW      TRUE      TRUE        MCF7_1         NA           NA
-
 ``` r
 tail(BreastCancerAtlas[[]])
 ```
 
-    ##                         orig.ident umi_count gene_count percent.mt
-    ## Ind7_TTTGTCAGTACAAGTA.3       Ind7      9580       2667   2.035491
-    ## Ind7_TTTGTCAGTACTTGAC.3       Ind7     17836       3732   1.474546
-    ## Ind7_TTTGTCAGTGTCTGAT.3       Ind7      9409       2598   3.762355
-    ## Ind7_TTTGTCAGTTCACCTC.3       Ind7      9713       3055   1.369299
-    ## Ind7_TTTGTCATCAACACTG.3       Ind7     26018       4328   1.245292
-    ## Ind7_TTTGTCATCTCACATT.3       Ind7     14201       3280   2.042110
-    ##                         percent.cg malignant cell_line sample_origin
-    ## Ind7_TTTGTCAGTACAAGTA.3   99.13043     FALSE     FALSE          Ind7
-    ## Ind7_TTTGTCAGTACTTGAC.3  100.00000     FALSE     FALSE          Ind7
-    ## Ind7_TTTGTCAGTGTCTGAT.3   97.39130     FALSE     FALSE          Ind7
-    ## Ind7_TTTGTCAGTTCACCTC.3   99.13043     FALSE     FALSE          Ind7
-    ## Ind7_TTTGTCATCAACACTG.3  100.00000     FALSE     FALSE          Ind7
-    ## Ind7_TTTGTCATCTCACATT.3   99.13043     FALSE     FALSE          Ind7
-    ##                         nCount_SCT nFeature_SCT
-    ## Ind7_TTTGTCAGTACAAGTA.3      13862         2680
-    ## Ind7_TTTGTCAGTACTTGAC.3      15232         3732
-    ## Ind7_TTTGTCAGTGTCTGAT.3      13815         2633
-    ## Ind7_TTTGTCAGTTCACCTC.3      13680         3068
-    ## Ind7_TTTGTCATCAACACTG.3      15423         3961
-    ## Ind7_TTTGTCATCTCACATT.3      14374         3279
+    ##              orig.ident umi_count gene_count percent.mt percent.cg
+    ## BT474.bcACAG      BT474      1850        956  17.837838   90.10989
+    ## BT474.bcEOYB      BT474      2043        973  17.474302   95.60440
+    ## BT474.bcEPIU      BT474      2370        993  24.135021   95.60440
+    ## BT474.bcDNGM      BT474      1880        976  16.808511   91.20879
+    ## BT474.bcHGBU      BT474      1822       1030   3.018661   95.60440
+    ## BT474.bcDGZQ      BT474      1739       1008   3.507763   96.70330
+    ##              malignant cell_line sample_origin
+    ## BT474.bcACAG      TRUE      TRUE         BT474
+    ## BT474.bcEOYB      TRUE      TRUE         BT474
+    ## BT474.bcEPIU      TRUE      TRUE         BT474
+    ## BT474.bcDNGM      TRUE      TRUE         BT474
+    ## BT474.bcHGBU      TRUE      TRUE         BT474
+    ## BT474.bcDGZQ      TRUE      TRUE         BT474
 
 ``` r
-saveRDS(BreastCancerAtlas, file="/projects/b1101/Jasen/data/BreastCancerAtlas.rds")
+saveRDS(BreastCancerAtlas, file="/projects/b1101/Jasen/data/BCCLatlas.rds")
 ```

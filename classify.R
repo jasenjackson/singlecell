@@ -6,9 +6,9 @@
 # into 1 seurat object
 
 # usage: Rscript integrate.r -s "/data/seurat_object.rds" -g "individual" -r "Ind4"
-#        Rscript integrate.r --seuratObject" "../data/BreastAtlas.rds" \
+#        Rscript integrate.r --seuratObject" "../data/BreastCancerAtlas.rds" \
 #                         --groupLabel "sample_origin" \
-#                         --reference "Ind4" \
+#                         --reference "Ind4,Ind5,Ind6,Ind7" \
 #                         --out "../data/BreastCancerAtlas.integrated.rds"
 library(Seurat)
 library(ggplot2)

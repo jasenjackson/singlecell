@@ -7,7 +7,7 @@ knitr::opts_chunk$set(
   fig.path = "figures/QC_Polyak-", 
   echo = TRUE)
 ```
-# QC of cancer cell line data (scRNA-seq) from the [Polyak lab](https://www.polyaklab.dfci.harvard.edu/)
+# QC of cell line data (scRNA-seq) from the [Polyak lab](https://www.polyaklab.dfci.harvard.edu/)
 ```{r, message=FALSE}
 # import packages and functions
 setwd('/projects/b1101/Jasen')
@@ -181,9 +181,9 @@ ncol(ZR75.mtx) - ncol(ZR75); ((ncol(ZR75.mtx)-ncol(ZR75)) / ncol(ZR75.mtx)) * 10
 rm(ZR75.cellstats); rm(ZR75.mtx); rm(ZR75.meta)
 ```
 
-## Merging cell lines with Breast Epithelial Atlas
+## Merging cell lines into one Seurat object
 
-Each cell line was first merged into an aggregate 'BreastCancerAtlas' object. The datasets will be split by 'sample_origin' before reference-based integration. 
+Each cell line was merged into an aggregate 'BreastCancerAtlas' object. The datasets will be split by 'sample_origin' before reference-based integration. 
 ```{r}
 BreastCancerAtlas <- merge(x = MCF7_1, y = list(MCF7_2, SUM159, T47D, ZR75, BT474))
 rm(MCF7_1, MCF7_2, SUM159, T47D, ZR75, BT474)
@@ -200,36 +200,10 @@ BreastCancerAtlas[["sample_origin"]] <- BreastCancerAtlas[["orig.ident"]]
 BreastCancerAtlas[["nCount_RNA"]] <- NULL
 BreastCancerAtlas[["nFeature_RNA"]] <- NULL
 head(BreastCancerAtlas[[]])
-```
-
-The integrated breast epithelial dataset was then joined with the breast cancer cell lines. 
-```{r}
-BreastAtlas.integrated <- readRDS(file="/projects/b1101/Jasen/data/BreastAtlas.integrated.rds") 
-ncol(BreastAtlas.integrated); nrow(BreastAtlas.integrated)
-
-BreastAtlas.integrated[["sample_origin"]] <- BreastAtlas.integrated[["individual"]]
-BreastAtlas.integrated[["individual"]] <- NULL
-
-# set malignant & cell_line columns
-malignant <- rep(FALSE, ncol(BreastAtlas.integrated))
-BreastAtlas.integrated[["malignant"]] <- malignant
-
-cell_line <- rep(FALSE, ncol(BreastAtlas.integrated))
-BreastAtlas.integrated[["cell_line"]] <- cell_line
-
-head(BreastAtlas.integrated[[]])
-
-# Merge non-malignant reference cells 'under' cell line data
-BreastCancerAtlas <- merge(x = BreastCancerAtlas, y = BreastAtlas.integrated)
-ncol(BreastCancerAtlas); nrow(BreastCancerAtlas)
-# remove redundant columns
-BreastCancerAtlas[["nCount_RNA"]] <- NULL
-BreastCancerAtlas[["nFeature_RNA"]] <- NULL
-
-head(BreastCancerAtlas[[]])
 tail(BreastCancerAtlas[[]])
-saveRDS(BreastCancerAtlas, file="/projects/b1101/Jasen/data/BreastCancerAtlas.rds")
+saveRDS(BreastCancerAtlas, file="/projects/b1101/Jasen/data/BCCLatlas.rds")
 ```
+
 
 
 
